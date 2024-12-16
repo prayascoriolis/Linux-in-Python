@@ -66,16 +66,13 @@ def ls(path, long_list, file_type_info):
                     print(file_type)
             # Handle detailed information (-l)
             if long_list is True:
-                permissions = oct(file_stat.st_mode)[-3:]
-                size = file_stat.st_size
-                mod_time = format_mod_time(file_stat.st_mtime)
+                permissions = oct(file_stat.st_mode)[-3:] # permission in numerical format
+                size = file_stat.st_size # size in bytes
+                mod_time = format_mod_time(file_stat.st_mtime) # time in M D H:M
                 # Get the group name & user name
                 group_name, user_name = get_user_group_names(file_stat.st_uid, file_stat.st_gid)
-                hard_link = file_stat.st_nlink
-                if file_type_info is True:
-                    print(f"{permissions} {hard_link} {group_name} {user_name} {size} {mod_time} {file_type}")
-                else:
-                    print(f"{permissions} {hard_link} {group_name} {user_name} {size} {mod_time}")
+                hard_link = file_stat.st_nlink # no. of hard links
+                print(f"{permissions} {hard_link} {group_name} {user_name} {size} {mod_time} {file_type if file_type_info else ''}".strip())
     except Exception as e:
         print(f"Error: {e}")
 
@@ -163,8 +160,8 @@ if __name__ == "__main__":
         print(args.dir, args.l, args.F)
         l,f = args.l, args.F
         ls(args.dir, l,f)
-    # elif args.command == "find":
-    #     find(args.dir, args.name)
+    elif args.command == "find":
+        find(args.dir, args.name)
     # elif args.command == "ln":
     #     ln(args.target, args.linkname)
     # elif args.command == "rm":
