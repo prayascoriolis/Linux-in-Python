@@ -77,9 +77,13 @@ def ls(path, long_list, file_type_info):
         print(f"Error: {e}")
 
 def find(path, name):
+    found = False
     for root, dirs, files in os.walk(path):
         if name in dirs or name in files:
             print(f"Found: {os.path.join(root, name)}")
+            found = True
+    if found is False:
+        print(f"Not Found: {os.path.join(path,name)}")
 
 def ln(target, link_name):
     try:
@@ -88,25 +92,26 @@ def ln(target, link_name):
     except Exception as e:
         print(f"Error: {e}")
 
-def rm(name):
+def rm(name, path):
     try:
-        if os.path.islink(name):
-            os.remove(name)
-            print(f"Symbolic link removed: {name}")
-        elif os.path.isdir(name):
-            if len(os.listdir(name)) > 0:
-                confirm = input(f"Directory {name} is not empty. Do you want to delete it? (y/n): ")
+        full_path = os.path.join(path, name)
+        if os.path.islink(full_path):
+            os.remove(full_path)
+            print(f"Symbolic link removed: {full_path}")
+        elif os.path.isdir(full_path):
+            if len(os.listdir(full_path)) > 0:
+                confirm = input(f"Directory {full_path} is not empty. Do you want to delete it? (y/n): ")
                 if confirm.lower() == 'y':
-                    os.rmdir(name)
-                    print(f"Directory removed: {name}")
+                    os.rmdir(full_path)
+                    print(f"Directory removed: {full_path}")
                 else:
                     print("Operation canceled.")
             else:
-                os.rmdir(name)
-                print(f"Directory removed: {name}")
+                os.rmdir(full_path)
+                print(f"Directory removed: {full_path}")
         else:
-            os.remove(name)
-            print(f"File removed: {name}")
+            os.remove(full_path)
+            print(f"File removed: {full_path}")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -162,10 +167,10 @@ if __name__ == "__main__":
         ls(args.dir, l,f)
     elif args.command == "find":
         find(args.dir, args.name)
-    # elif args.command == "ln":
-    #     ln(args.target, args.linkname)
-    # elif args.command == "rm":
-    #     rm(args.name)
+    elif args.command == "ln":
+        ln(args.target, args.linkname)
+    elif args.command == "rm":
+        rm(args.name, args.dir)
     else:
         print("Invalid command.")
 
