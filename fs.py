@@ -85,10 +85,16 @@ def find(path, name):
     if found is False:
         print(f"Not Found: {os.path.join(path,name)}")
 
-def ln(target, link_name):
+def ln(target, link, soft_link, path):
     try:
-        os.symlink(target, link_name)
-        print(f"Symbolic link created: {link_name} -> {target}")
+        target_full_path = os.path.join(path, target)
+        link_full_path = os.path.join(path, link)
+        if soft_link is True:
+            os.symlink(target_full_path, link_full_path)
+            print(f"Soft link created: {link_full_path} -> {target_full_path}")
+        else:
+            os.link(target_full_path, link_full_path)
+            print(f"Hard link created: {link_full_path} -> {target_full_path}")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -123,7 +129,7 @@ def create_parser():
         "dir",
         nargs="?",
         default="./",
-        help="Directory path to operate on (default is current directory)"
+        help="Directory path"
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -147,6 +153,7 @@ def create_parser():
 
     # Subparser for `ln`
     ln_parser = subparsers.add_parser("ln", help="Create a symbolic link")
+    ln_parser.add_argument( "-s", action="store_true", help="flag to determine hard or soft link")
     ln_parser.add_argument("target", help="Target file or directory")
     ln_parser.add_argument("linkname", help="Link name")
 
@@ -159,8 +166,7 @@ def create_parser():
 if __name__ == "__main__":
     parser = create_parser()
     args = parser.parse_args()
-
-    # Check which command was given and call the corresponding function
+    # Check which command was given and call the required function
     if args.command == "ls":
         print(args.dir, args.l, args.F)
         l,f = args.l, args.F
@@ -168,7 +174,9 @@ if __name__ == "__main__":
     elif args.command == "find":
         find(args.dir, args.name)
     elif args.command == "ln":
-        ln(args.target, args.linkname)
+        s = args.s
+        dir = args.dir
+        ln(args.target, args.linkname, s, dir)
     elif args.command == "rm":
         rm(args.name, args.dir)
     else:
