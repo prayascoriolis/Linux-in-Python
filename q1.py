@@ -15,8 +15,6 @@ Requirements:
 '''
 import argparse
 import os
-import stat
-import sys
 import time
 import grp
 import pwd
@@ -63,17 +61,17 @@ def check_file_type(path):
     Returns:
         str: A string describing the file type ("directory", "regular file", "symbolic link", or "Unknown file type").
     """
-    p = Path(path)
-    if p.is_dir():
+    path_of_file = Path(path)
+    if path_of_file.is_dir():
         return "directory."
-    elif p.is_file():
+    elif path_of_file.is_file():
         return "regular file."
-    elif p.is_symlink():
+    elif path_of_file.is_symlink():
         return "symbolic link."
     else:
         return "Unknown file type."
 
-def ls(path, long_list, file_type_info):
+def ls_implement(path, long_list, file_type_info):
     """
     List the contents of a directory, with optional detailed information and file type information.
     Args:
@@ -112,9 +110,8 @@ def find(path, name):
     """
     Search for a file or directory by name within the specified path.
     Args:
-        path (str): The directory path to start searching in.
+        path (str): current dir
         name (str): The name of the file or directory to find.
-        
     Prints:
         The full path of the found file/directory or a message if not found.
     """
@@ -126,58 +123,60 @@ def find(path, name):
     if found is False:
         print(f"Not Found: {os.path.join(path,name)}")
 
-def ln(target, link, soft_link, path):
+def ln_implement(target, link, soft_link):
     """
     Create either a hard or soft (symbolic) link from a target file/directory to a new link.
     Args:
         target (str): The name of the target file or directory to link to.
         link (str): The name of the link to be created.
         soft_link (bool): If True, create a symbolic (soft) link; if False, create a hard link.
-        path (str): The directory path where both the target and link are located.
     Prints:
         A message indicating whether a hard or soft link was created.
     """
     try:
-        target_full_path = os.path.join(path, target)
-        link_full_path = os.path.join(path, link)
+        # extracting dir name from target file
+        target_dir_name = os.path.dirname(target)
+        # making sure to add link file in same dir
+        link_full_path = os.path.join(target_dir_name, link)
+        # soft link
         if soft_link is True:
-            os.symlink(target_full_path, link_full_path)
-            print(f"Soft link created: {link_full_path} -> {target_full_path}")
+            os.symlink(target, link_full_path)
+            print(f"Soft link created: {link_full_path} -> {target}")
+        # hard link
         else:
-            os.link(target_full_path, link_full_path)
-            print(f"Hard link created: {link_full_path} -> {target_full_path}")
+            os.link(target, link_full_path)
+            print(f"Hard link created: {link_full_path} -> {target}")
     except Exception as e:
         print(f"Error: {e}")
 
-def rm(name, path):
+def rm_implement(name):
     """
     Remove a file or directory from the filesystem. If it's a symbolic link, it is removed directly.
     If it's a directory, the user is prompted before deletion if it's not empty.
     Args:
         name (str): The name of the file or directory to remove.
-        path (str): The directory path where the file or directory exists.
     Prints:
         A message indicating whether a file or directory was removed or if there was an error.
     """
     try:
-        full_path = os.path.join(path, name)
-        if os.path.islink(full_path):
-            os.remove(full_path)
-            print(f"Symbolic link removed: {full_path}")
-        elif os.path.isdir(full_path):
-            if len(os.listdir(full_path)) > 0:
-                confirm = input(f"Directory {full_path} is not empty. Do you want to delete it? (y/n): ")
+        file_path = name
+        if os.path.islink(file_path):
+            os.remove(file_path)
+            print(f"Symbolic link removed: {file_path}")
+        elif os.path.isdir(file_path):
+            if len(os.listdir(file_path)) > 0:
+                confirm = input(f"Directory {file_path} is not empty. Do you want to delete it? (y/n): ")
                 if confirm.lower() == 'y':
-                    os.rmdir(full_path)
-                    print(f"Directory removed: {full_path}")
+                    os.rmdir(file_path)
+                    print(f"Directory removed: {file_path}")
                 else:
                     print("Operation canceled.")
             else:
-                os.rmdir(full_path)
-                print(f"Directory removed: {full_path}")
+                os.rmdir(file_path)
+                print(f"Directory removed: {file_path}")
         else:
-            os.remove(full_path)
-            print(f"File removed: {full_path}")
+            os.remove(file_path)
+            print(f"File removed: {file_path}")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -189,12 +188,6 @@ def create_parser():
     """
     parser = argparse.ArgumentParser(description="File system explorer.")
     # Define the main directory argument
-    parser.add_argument(
-        "dir",
-        nargs="?",
-        default="./",
-        help="Directory path"
-    )
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Subparser for `ls`
@@ -229,19 +222,37 @@ def create_parser():
 if __name__ == "__main__":
     parser = create_parser()
     args = parser.parse_args()
+    current_dir = os.getcwd()
     # Check which command was given and call the required function
     if args.command == "ls":
-        print(args.dir, args.l, args.F)
         l,f = args.l, args.F
-        ls(args.dir, l,f)
+        ls_implement(current_dir, l,f)
     elif args.command == "find":
-        find(args.dir, args.name)
+        find(current_dir, args.name)
     elif args.command == "ln":
         s = args.s
-        dir = args.dir
-        ln(args.target, args.linkname, s, dir)
+        ln_implement(args.target, args.linkname, s)
     elif args.command == "rm":
-        rm(args.name, args.dir)
+        rm_implement(args.name)
     else:
         print("Invalid command.")
 
+'''
+USAGE
+ ls:
+    1. python3 q1.py ls
+    2. python3 q1.py ls -l
+    3. python3 q1.py ls -F
+    4. python3 q1.py ls -lF
+
+ find:
+    1. python3 q1.py find q2.py
+
+ ln: 
+    1. python3 q1.py ln -s ./test1/test2/x.txt soft_link.log
+    2. python3 q1.py ln ./test1/test2/x.txt hard_link.log
+
+ rm: 
+    1. python3 q1.py rm ./test1/test2/x.txt
+    2. python3 q1.py rm ./test1/test2
+'''
