@@ -23,11 +23,27 @@ import pwd
 from pathlib import Path
 
 def format_mod_time(mod_time):
+    """
+    Convert the modification time (timestamp) of a file into a human-readable format.
+    Args:
+        mod_time (float): The modification time of the file as a Unix timestamp.
+    Returns:
+        str: The formatted modification time as a string, e.g., "Dec 17 14:32".
+    """
     # Convert the timestamp
     mod_time_struct = time.localtime(mod_time)
     return time.strftime("%b %d %H:%M", mod_time_struct)
 
 def get_user_group_names(st_uid, st_gid):
+    """
+    Retrieve the user and group names associated with the given user ID and group ID.
+    Args:
+        st_uid (int): The user ID of the file owner.
+        st_gid (int): The group ID of the file owner.
+    Returns:
+        tuple: A tuple containing the user name (str) and the group name (str). 
+               If an error occurs, returns a tuple with None and an error message.
+    """
     try:
         # Get the group name using st_gid
         group_info = grp.getgrgid(st_gid)
@@ -40,6 +56,13 @@ def get_user_group_names(st_uid, st_gid):
         return None, f"Error: {e}"
 
 def check_file_type(path):
+    """
+    Check and return the type of the file at the given path (directory, regular file, symbolic link, or unknown).
+    Args:
+        path (str): The path to the file or directory.
+    Returns:
+        str: A string describing the file type ("directory", "regular file", "symbolic link", or "Unknown file type").
+    """
     p = Path(path)
     if p.is_dir():
         return "directory."
@@ -51,6 +74,15 @@ def check_file_type(path):
         return "Unknown file type."
 
 def ls(path, long_list, file_type_info):
+    """
+    List the contents of a directory, with optional detailed information and file type information.
+    Args:
+        path (str): The path to the directory to list.
+        long_list (bool): Flag to indicate whether detailed file information (-l) should be displayed.
+        file_type_info (bool): Flag to indicate whether file type information (-F) should be displayed.
+    Prints:
+        The names of the files and directories, along with detailed information if applicable.
+    """
     try:
         # list of all files in the dir
         entries = os.listdir(path)
@@ -77,6 +109,15 @@ def ls(path, long_list, file_type_info):
         print(f"Error: {e}")
 
 def find(path, name):
+    """
+    Search for a file or directory by name within the specified path.
+    Args:
+        path (str): The directory path to start searching in.
+        name (str): The name of the file or directory to find.
+        
+    Prints:
+        The full path of the found file/directory or a message if not found.
+    """
     found = False
     for root, dirs, files in os.walk(path):
         if name in dirs or name in files:
@@ -86,6 +127,16 @@ def find(path, name):
         print(f"Not Found: {os.path.join(path,name)}")
 
 def ln(target, link, soft_link, path):
+    """
+    Create either a hard or soft (symbolic) link from a target file/directory to a new link.
+    Args:
+        target (str): The name of the target file or directory to link to.
+        link (str): The name of the link to be created.
+        soft_link (bool): If True, create a symbolic (soft) link; if False, create a hard link.
+        path (str): The directory path where both the target and link are located.
+    Prints:
+        A message indicating whether a hard or soft link was created.
+    """
     try:
         target_full_path = os.path.join(path, target)
         link_full_path = os.path.join(path, link)
@@ -99,6 +150,15 @@ def ln(target, link, soft_link, path):
         print(f"Error: {e}")
 
 def rm(name, path):
+    """
+    Remove a file or directory from the filesystem. If it's a symbolic link, it is removed directly.
+    If it's a directory, the user is prompted before deletion if it's not empty.
+    Args:
+        name (str): The name of the file or directory to remove.
+        path (str): The directory path where the file or directory exists.
+    Prints:
+        A message indicating whether a file or directory was removed or if there was an error.
+    """
     try:
         full_path = os.path.join(path, name)
         if os.path.islink(full_path):
@@ -122,8 +182,12 @@ def rm(name, path):
         print(f"Error: {e}")
 
 def create_parser():
+    """
+    Create and return an argument parser for a file system explorer tool.
+    Returns:
+        argparse.ArgumentParser: The argument parser object with all subcommands and options.
+    """
     parser = argparse.ArgumentParser(description="File system explorer.")
-   
     # Define the main directory argument
     parser.add_argument(
         "dir",
@@ -131,7 +195,6 @@ def create_parser():
         default="./",
         help="Directory path"
     )
-
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Subparser for `ls`
