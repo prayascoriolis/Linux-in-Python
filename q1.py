@@ -85,7 +85,7 @@ def ls_implement(path, long_list, file_type_info):
         # list of all files in the dir
         entries = os.listdir(path)
         for entry in entries:
-            full_path = os.path.join(path, entry)
+            full_path = os.path.join(path, entry) # complete path of each entry
             file_stat = os.stat(full_path)
             # if both -l and -F is false, only files are listed
             print(entry, end=" ")
@@ -160,9 +160,11 @@ def rm_implement(name):
     """
     try:
         file_path = name
+        # remove link
         if os.path.islink(file_path):
             os.remove(file_path)
             print(f"Symbolic link removed: {file_path}")
+        # remove dir
         elif os.path.isdir(file_path):
             if len(os.listdir(file_path)) > 0:
                 confirm = input(f"Directory {file_path} is not empty. Do you want to delete it? (y/n): ")
@@ -174,6 +176,7 @@ def rm_implement(name):
             else:
                 os.rmdir(file_path)
                 print(f"Directory removed: {file_path}")
+        # remove file
         else:
             os.remove(file_path)
             print(f"File removed: {file_path}")
@@ -238,7 +241,8 @@ if __name__ == "__main__":
         print("Invalid command.")
 
 '''
-USAGE
+USAGE:
+
  ls:
     1. python3 q1.py ls
     2. python3 q1.py ls -l

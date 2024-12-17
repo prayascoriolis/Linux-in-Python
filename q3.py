@@ -10,3 +10,5 @@ Requirements:
     Implement a feature to monitor real-time changes to devices (e.g., using inotify or polling /dev for new device connections).
     Allow the user to terminate processes or safely eject devices.
 '''
+
+import psutil
