@@ -19,6 +19,7 @@ import time
 import grp
 import pwd
 from pathlib import Path
+import stat
 
 def format_mod_time(mod_time):
     """
@@ -48,8 +49,8 @@ def get_user_group_names(st_uid, st_gid):
         group_name = group_info.gr_name
         # Get the user name using st_uid
         user_info = pwd.getpwuid(st_uid)
-        user_name = user_info.pw_name
-        return user_name, group_name
+        owner_name = user_info.pw_name
+        return owner_name, group_name
     except Exception as e:
         return None, f"Error: {e}"
 
@@ -96,13 +97,13 @@ def ls_implement(path, long_list, file_type_info):
                     print(file_type)
             # Handle detailed information (-l)
             if long_list is True:
-                permissions = oct(file_stat.st_mode)[-3:] # permission in numerical format
+                symbolic_permissions = stat.filemode(file_stat.st_mode) # permission in symbolic format
                 size = file_stat.st_size # size in bytes
                 mod_time = format_mod_time(file_stat.st_mtime) # time in M D H:M
                 # Get the group name & user name
-                group_name, user_name = get_user_group_names(file_stat.st_uid, file_stat.st_gid)
+                owner_name, group_name = get_user_group_names(file_stat.st_uid, file_stat.st_gid)
                 hard_link = file_stat.st_nlink # no. of hard links
-                print(f"{permissions} {hard_link} {group_name} {user_name} {size} {mod_time} {file_type if file_type_info else ''}".strip())
+                print(f"{symbolic_permissions} {hard_link} {group_name} {owner_name} {size} {mod_time} {file_type if file_type_info else ''}".strip())
     except Exception as e:
         print(f"Error: {e}")
 
