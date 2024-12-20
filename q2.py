@@ -36,13 +36,40 @@ def display_disk_info():
             print("Access Denied\n")
 
 def mount_device(device, mountpoint):
-    '''mounting'''
+    '''
+    mounting
+    *** make sure the device is partitoned and filesystem assigned ***
+    '''
+    try:
+        subprocess.run(['sudo', 'mount', device, mountpoint], check=True)
+        print(f"Device {device} successfully mounted at {mountpoint}.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error mounting: {e}")
 
 def unmount_device(device):
     '''unmounting'''
+    try:
+        subprocess.run(['sudo', 'umount', device], check=True)
+        print(f"Device {device} successfully unmounted.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error unmounting: {e}")
 
 def format_device(device, filesystem):
-    ''' change format of a disk'''
+    ''' changing format of a filesystem'''
+    try:
+        valid_filesystems = ['ext4', 'vfat', 'ntfs', 'ext3']
+        if filesystem not in valid_filesystems:
+            print(f"Unsupported filesystem: {filesystem}. Choose from {valid_filesystems}.")
+            return
+        print(f"Warning: Formatting {device} will erase all data!")
+        confirm = input("Type 'YES' to proceed: ").strip()
+        if confirm != 'YES':
+            print("Operation cancelled.")
+            return
+        subprocess.run(['sudo', f'mkfs.{filesystem}', device], check=True)
+        print(f"{device} successfully formatted to {filesystem}.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     while True:
@@ -66,7 +93,7 @@ if __name__ == "__main__":
             unmount_device(device)
         elif choice == "4":
             device = input("Enter the device path to format (in /dev/): ").strip()
-            filesystem = input("Enter filesystem type (ext4, xfs etc): ").strip()
+            filesystem = input("Enter filesystem type (ext4, vfat etc): ").strip()
             format_device(device, filesystem)
         elif choice == "5":
             print("Exiting Disk Management.")
