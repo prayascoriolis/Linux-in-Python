@@ -37,7 +37,9 @@ def display_disk_info():
 
 def mount_device(device, mountpoint):
     '''
-    mounting
+    mounting operation
+    device: ex- /dev/sda3
+    mountpoint: ex- /mnt/
     *** make sure the device is partitoned and filesystem assigned ***
     '''
     try:
@@ -47,7 +49,10 @@ def mount_device(device, mountpoint):
         print(f"Error mounting: {e}")
 
 def unmount_device(device):
-    '''unmounting'''
+    '''
+    unmounting
+    device: ex- /dev/sda3
+    '''
     try:
         subprocess.run(['sudo', 'umount', device], check=True)
         print(f"Device {device} successfully unmounted.")
@@ -55,7 +60,11 @@ def unmount_device(device):
         print(f"Error unmounting: {e}")
 
 def format_device(device, filesystem):
-    ''' changing format of a filesystem'''
+    '''
+    changing format of a filesystem
+    device: ex- /dev/sda3
+    filesystem (new): ex- 'ext4', 'vfat', 'ntfs', 'ext3'
+    '''
     try:
         valid_filesystems = ['ext4', 'vfat', 'ntfs', 'ext3']
         if filesystem not in valid_filesystems:

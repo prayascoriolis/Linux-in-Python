@@ -16,6 +16,7 @@ import os
 import subprocess
 import time
 import inotify.adapters
+import sys
 
 def display_active_process():
     '''
@@ -58,21 +59,43 @@ def eject_device(device):
     '''
     Allow the user to safely eject devices.
     '''
+    """Eject the device."""
+    try:
+        subprocess.run(['sudo', 'eject', device], check=True)
+        print(f"Device {device} ejected successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error ejecting device {device}: {e}")
+        sys.exit(1)
     return
 
 def real_time_monitoring():
     '''
     Implement a feature to monitor real-time changes to devices (e.g., using inotify or polling /dev for new device connections).
     '''
-    return
+    import os
+import time
+
+def real_time_monitoring(dev_directory='/dev'):
+    """Poll the /dev directory for device changes."""
+    known_devices = set(os.listdir(dev_directory))
+    while True:
+        time.sleep(1)  # Poll every 1 second
+        current_devices = set(os.listdir(dev_directory))
+        added_devices = current_devices - known_devices
+        removed_devices = known_devices - current_devices
+        for device in added_devices:
+            print(f"New device connected: {dev_directory}/{device}")
+        for device in removed_devices:
+            print(f"Device disconnected: {dev_directory}/{device}")
+        known_devices = current_devices
 
 def menu():
     print("Please choose an option:")
     print("1. Display active processes")
     print("2. Display connected devices")
     print("3. Terminate a process")
-    # print("4. Eject a device")
-    # print("5. Real-time monitoring of devices")
+    print("4. Eject a device")
+    print("5. Real-time monitoring of devices")
     print("6. Exit")
 
 if __name__ == "__main__":
@@ -86,11 +109,11 @@ if __name__ == "__main__":
         elif choice == "3":
             pid = int(input("\nEnter PID of the process to terminate: "))
             terminate_process(pid)
-        # elif choice == "4":
-        #     device = input("\nEnter the device name to eject (e.g., sdb1): ")
-        #     eject_device(device)
-        # elif choice == "5":
-        #     real_time_monitoring()
+        elif choice == "4":
+            device = input("\nEnter the device name to eject (e.g., sdb1): ")
+            eject_device(device)
+        elif choice == "5":
+            real_time_monitoring()
         elif choice == "6":
             print("Exiting the program.")
             break
