@@ -87,20 +87,17 @@ def real_time_monitoring(dev_directory='/dev'):
             print(f"New device connected: {dev_directory}/{device}")
         for device in removed_devices:
             print(f"Device disconnected: {dev_directory}/{device}")
-        known_devices = current_devices
-
-def menu():
-    print("Please choose an option:")
-    print("1. Display active processes")
-    print("2. Display connected devices")
-    print("3. Terminate a process")
-    print("4. Eject a device")
-    print("5. Real-time monitoring of devices")
-    print("6. Exit")
+        known_devices = current_devices    
 
 if __name__ == "__main__":
     while True:
-        menu()
+        print("Please choose an option:")
+        print("1. Display active processes")
+        print("2. Display connected devices")
+        print("3. Terminate a process")
+        print("4. Eject a device")
+        print("5. Real-time monitoring of devices")
+        print("6. Exit")
         choice = input("Enter the number of your choice: ").strip()
         if choice == "1":
             display_active_process()

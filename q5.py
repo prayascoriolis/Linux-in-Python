@@ -60,15 +60,19 @@ class VirtualDirectory:
             return self.parent.full_path() + "/" + self.name
         return "/"  # root directory
 
-    def display_tree(self, prefix=""):
+    def display_tree(self, prefix="", is_root=True):
         """Recursively display the directory tree structure."""
-        print(f"{prefix}📂 {self.name}")
+        if is_root:
+            print(f"{prefix}(ROOT) /")  # Show "root" for the first directory
+            is_root = False
+        else:
+            print(f"{prefix}(DIR) {self.name}")
+        # Recurse through children
         for child_name, child in self.children.items():
             if child.type == "directory":
-                child.display_tree(prefix + "    ")
+                child.display_tree(prefix + "    ", is_root)
             else:
-                print(f"{prefix}    📄 {child_name}")
-
+                print(f"{prefix}    (FILE) {child_name}")
 
 class VirtualFileSystem:
     def __init__(self):
@@ -79,20 +83,35 @@ class VirtualFileSystem:
         """Create a new directory at a specified path."""
         path_parts = path.strip('/').split('/')
         current = self.root
+        exist = True # assuming the file/folder already exsists
         for part in path_parts:
-            print(part, current.name, current.children)
+            # print(part, current.name, current.children)
             if part not in current.children:
+                # constructing new files/folders
                 current.add(part, VirtualDirectory(part, current))
+                exist = False
             current = current.children[part]
-        print(f"Directory '{path}' created.")
-
-    def touch(self, name):
-        """Create a new file."""
-        if name in self.current_directory.children:
-            print(f"File '{name}' already exists.")
+        if exist == True:
+            print(f"Directory '{path}' already exsists.")
         else:
-            self.current_directory.add(name, VirtualFile(name))
-            print(f"File '{name}' created.")
+            print(f"Directory '{path}' created.")
+
+    def touch(self, path):
+        """Create a new file."""
+        path_parts = path.strip('/').split('/')
+        current = self.root
+        exist = True # assuming the file already exsists
+        for part in path_parts:
+            # print(part, current.name, current.children)
+            if part not in current.children:
+                # constructing new file
+                current.add(part, VirtualFile(part))
+                exist = False
+            current = current.children[part]
+        if exist == True:
+            print(f"File '{path}' already exists.")
+        else:
+            print(f"File '{path}' created.")
 
     def rm(self, name):
         """Remove a file or directory."""
@@ -104,11 +123,27 @@ class VirtualFileSystem:
 
     def mv(self, source, destination):
         """Move or rename a file or directory."""
+        # fetching file or dir object
         source_entity = self.current_directory.get(source)
         if source_entity:
             self.current_directory.remove(source)
-            self.current_directory.add(destination, source_entity)
-            print(f"'{source}' moved/renamed to '{destination}'.")
+            path = destination
+            path_parts = path.strip('/').split('/')
+            path_parts.append(source_entity.name) # adding file name to path_parts
+            current = self.current_directory
+            exist = True # assuming the file/folder already exsists
+            for part in path_parts:
+                if part not in current.children:
+                    # constructing new files/folders
+                    current.add(part, source_entity)
+                    exist = False
+                current = current.children[part]
+            if exist == True:
+                print(f"File '{path}' already exists.")
+            else:
+                print(f"File '{path}' created.")
+                # self.current_directory.add(destination, source_entity)
+                print(f"'{source}' moved/renamed to '{destination}'.")
         else:
             print(f"'{source}' not found.")
 
@@ -223,20 +258,46 @@ if __name__ == "__main__":
 ''' 
 USAGE:
 
-python q5.py mkdir mydir        # Create directory 'mydir'
-
-python q5.py mkdir subdir       # Create 'subdir' inside the current directory
-
-python q5.py touch myfile.txt   # Create file 'myfile.txt'
-
-python q5.py ls                 # List contents of current directory
-
-python q5.py pwd                # Show the full path of the current directory
-
-python q5.py mv myfile.txt myfile2.txt  # Rename 'myfile.txt' to 'myfile2.txt'
-
-python q5.py rm myfile2.txt     # Remove 'myfile2.txt'
-
-python q5.py ls /mydir          # List contents of 'mydir' (absolute path)
+colama@colama-KVM:~/Desktop/data_disk/python_assignment$ python3 q5.py
+Welcome to the Real-Time Virtual File System! Type 'exit' to quit.
+VFS> mkdir dir1
+Directory 'dir1' created.
+VFS> mkdir dir1/dir2
+Directory 'dir1/dir2' created.
+VFS> touch t.txt
+File 't.txt' created.
+VFS> tree
+Virtual File System Tree:
+(ROOT) /
+    (DIR) dir1
+        (DIR) dir2
+    (FILE) t.txt
+VFS> write t.txt hello
+Content written to 't.txt'.
+VFS> read t.txt
+hello
+VFS> mv t.txt dir1/dir2/
+File 'dir1/dir2/' created.
+'t.txt' moved/renamed to 'dir1/dir2/'.
+VFS> tree
+Virtual File System Tree:
+(ROOT) /
+    (DIR) dir1
+        (DIR) dir2
+            (FILE) t.txt
+VFS> ls
+dir1
+VFS> pwd
+/
+VFS> touch f.txt
+File 'f.txt' created.
+VFS> rm f.txt
+'f.txt' removed.
+VFS> tree
+Virtual File System Tree:
+(ROOT) /
+    (DIR) dir1
+        (DIR) dir2
+            (FILE) t.txt
 
 '''
