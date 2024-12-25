@@ -1,0 +1,1 @@
+'''6.	Develop a script that validates if a given string is a valid email address.'''

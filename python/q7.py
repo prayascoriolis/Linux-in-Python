@@ -1,0 +1,1 @@
+'''7.	Implement a function to generate Pascal's triangle up to n rows.'''

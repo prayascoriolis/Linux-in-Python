@@ -1,0 +1,1 @@
+'''12. Develop a program that compresses a string using run-length encoding.'''

@@ -1,0 +1,1 @@
+'''3.	Write a program to find the transpose of a matrix.'''

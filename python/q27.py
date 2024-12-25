@@ -1,0 +1,1 @@
+'''27. Write a function to get all matches from a file using a regular expression pattern (All dates, Hyperlinks, Capitalized words, email-id, IP address).'''

@@ -1,0 +1,1 @@
+'''22. Implement a function to compute the shortest path in a graph using Dijkstra's algorithm.'''

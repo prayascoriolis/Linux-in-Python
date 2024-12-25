@@ -1,0 +1,1 @@
+'''19. Create a script that simulates a basic stopwatch with start, stop, and reset functionality.'''

@@ -1,0 +1,1 @@
+'''26. Implement a script to simulate a file compression algorithm (e.g., Huffman coding).'''

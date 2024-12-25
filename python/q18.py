@@ -1,0 +1,1 @@
+'''18. Write a program to create a simple text-based database system with CRUD (Create, read, update and delete) operations.'''

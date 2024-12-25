@@ -1,0 +1,1 @@
+'''21. Write a program to implement a spell checker using the dictionary lookup.'''

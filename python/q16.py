@@ -1,0 +1,1 @@
+'''16. Develop a script to generate all permutations of a list.'''

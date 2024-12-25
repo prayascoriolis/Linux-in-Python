@@ -1,0 +1,1 @@
+'''2.	Develop a function to calculate the nth Fibonacci number iteratively and recursively.'''

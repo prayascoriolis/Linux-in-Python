@@ -1,0 +1,1 @@
+'''14. Create a program that checks if a string is a valid palindrome, ignoring spaces and punctuation.'''

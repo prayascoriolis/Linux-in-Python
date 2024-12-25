@@ -1,0 +1,1 @@
+'''11. Write a function to solve a Sudoku puzzle (validate the grid format only).'''
