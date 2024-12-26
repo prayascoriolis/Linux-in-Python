@@ -9,7 +9,8 @@ class HuffmanNode:
         self.freq = freq
         self.left = None
         self.right = None
-    # Comparison for the priority queue
+    # Whenever the HuffmanNode objects are inserted into a heap (heapq.heappush() or heapq.heapify()),
+    # Python will use the __lt__ method to compare nodes and organize them in the heap.
     def __lt__(self, other):
         return self.freq < other.freq
 
@@ -18,6 +19,7 @@ def build_huffman_tree(text):
     freq = Counter(text)
     # single-node priority queue
     heap = [HuffmanNode(char, f) for char, f in freq.items()]
+    # A min-heap (node with the smallest frequency is at the root (index 0) of the heap)
     heapq.heapify(heap)
     # Build the Huffman tree
     while len(heap) > 1:
@@ -26,7 +28,7 @@ def build_huffman_tree(text):
         merged = HuffmanNode(None, node1.freq + node2.freq)
         merged.left = node1
         merged.right = node2
-        heapq.heappush(heap, merged)
+        heapq.heappush(heap, merged) # appended back at end of priority queue
     return heap[0]  # root of the tree
 
 def build_huffman_codes(root, code="", codes={}):
@@ -92,7 +94,6 @@ def decompress(input_path, codes):
         output.write(decompressed_text)
     print(f"Decompressed file saved at: {output_path}")
 
-# Example Usage
 if __name__ == "__main__":
 
     # reading .txt file
