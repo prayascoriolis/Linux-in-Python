@@ -7,7 +7,6 @@ def read_n_write_csv(file_path):
         # Check if the file exists
         if os.path.exists(file_path):
             print("Reading existing CSV file:")
-            # Read the existing CSV file using pandas
             df = pd.read_csv(file_path)
             print(df)
         else:

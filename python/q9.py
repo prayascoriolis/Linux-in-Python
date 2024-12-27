@@ -3,7 +3,6 @@
 def find_mode(lst):
     if not lst:
         return None
-    # dictionary to count occurrences of each element
     frequency = {}
     for item in lst:
         frequency[item] = frequency.get(item, 0) + 1
