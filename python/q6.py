@@ -9,12 +9,5 @@ def is_valid_email(email):
     return False
 
 if __name__ == "__main__":
-    emails = [
-        ,
-        "valid.email@domain.co",
-        "invalid@domain",
-        "another@domain..com",
-        "@no-local-part.com",
-        "no-at-sign.com"
-    ]
-    print(f"{email}: {is_valid_email(""test@example.com"")}")
+    emails = "prayas.kumar@coriolis.co.in"
+    print(f"{emails}: {is_valid_email(emails)}")

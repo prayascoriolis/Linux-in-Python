@@ -54,7 +54,6 @@ def evaluate_expression(expr):
 
     return values[0]
 
-# Example Usage:
 expression = "2 + 3 * 5"
 print(f"Result: {evaluate_expression(expression)}")  # Output: 17
 
