@@ -55,7 +55,6 @@ def evaluate_expression(expr):
     return values[0]
 
 expression = "2 + 3 * 5"
-print(f"Result: {evaluate_expression(expression)}")  # Output: 17
-
+print(f"Result: {evaluate_expression(expression)}")
 expression = "22 / 7"
-print(f"Result: {evaluate_expression(expression)}")  # Output: 3.142857142857143
+print(f"Result: {evaluate_expression(expression)}")
