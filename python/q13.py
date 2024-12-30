@@ -30,7 +30,6 @@ def evaluate_expression(expr):
     i = 0
     while i < len(expr):
         char = expr[i]
-
         if char == ' ':
             i += 1
             continue
@@ -42,8 +41,9 @@ def evaluate_expression(expr):
                 i += 1
             values.append(float(''.join(num)))
             continue
-
         if char in ('+', '-', '*', '/'):
+            # if the precedence of current char > precedence of last char in operators stack,
+            # then the value of top 2 values with last char as operator is evaluated
             while (operators and precedence(operators[-1]) >= precedence(char)):
                 calculate(operators, values)
             operators.append(char)
@@ -54,7 +54,8 @@ def evaluate_expression(expr):
 
     return values[0]
 
-expression = "2 + 3 * 5"
-print(f"Result: {evaluate_expression(expression)}")
-expression = "22 / 7"
-print(f"Result: {evaluate_expression(expression)}")
+if __name__=="__main__":
+    expression = "2 * 3 + 5"
+    print(f"Result: {evaluate_expression(expression)}")
+    # expression = "22 / 7"
+    # print(f"Result: {evaluate_expression(expression)}")

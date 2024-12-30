@@ -25,46 +25,52 @@ def connect_db():
 
 def save_to_db(db_data_dict):
     """Save the scraped data into the SQLite database."""
-    conn = connect_db()
-    cursor = conn.cursor()
-    cursor.execute(
-        f"INSERT INTO {TABLE_NAME} (title, description, owner, tags) VALUES (%s, %s, %s, %s)",
-        (
-            db_data_dict["title"],
-            db_data_dict["description"],
-            db_data_dict["owner"],
-            db_data_dict["tags"],
-        ),
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(
+            f"INSERT INTO {TABLE_NAME} (title, description, owner, tags) VALUES (%s, %s, %s, %s)",
+            (
+                db_data_dict["title"],
+                db_data_dict["description"],
+                db_data_dict["owner"],
+                db_data_dict["tags"],
+            ),
+        )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print('ERROR:',e)
 
 
 def scrape_page(url):
     """Scrape data from a single page."""
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    # fetching the html container containing all the questions
-    question_section = soup.find("div", class_="flush-left", id="questions")
-    for data in question_section.find_all("div"):
-        # fetch description, title, owner, tags using tag and class name
-        description = data.find("div", class_="s-post-summary--content-excerpt")
-        title = data.find("h3", class_="s-post-summary--content-title")
-        owner = data.find("div", class_="s-user-card--link")
-        li_tags = data.find("ul", class_="js-post-tag-list-wrapper")
-        db_data_dict = {"description": "", "title": "", "owner": "", "tags": ""}
-        if description not in [-1, None]:
-            db_data_dict["description"] = description.get_text().strip()
-        if title not in [-1, None]:
-            db_data_dict["title"] = title.get_text().strip()
-        if owner not in [-1, None]:
-            db_data_dict["owner"] = owner.get_text().strip()
-        if li_tags not in [-1, None]:
-            db_data_dict["tags"] = ", ".join([li.get_text().strip() for li in li_tags])
-        # check if all keys are present
-        if all(value != "" for value in db_data_dict.values()):
-            # Save the data to the database
-            save_to_db(db_data_dict)
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+        # fetching the html container containing all the questions
+        question_section = soup.find("div", class_="flush-left", id="questions")
+        for data in question_section.find_all("div"):
+            # fetch description, title, owner, tags using tag and class name
+            description = data.find("div", class_="s-post-summary--content-excerpt")
+            title = data.find("h3", class_="s-post-summary--content-title")
+            owner = data.find("div", class_="s-user-card--link")
+            li_tags = data.find("ul", class_="js-post-tag-list-wrapper")
+            db_data_dict = {"description": "", "title": "", "owner": "", "tags": ""}
+            if description not in [-1, None]:
+                db_data_dict["description"] = description.get_text().strip()
+            if title not in [-1, None]:
+                db_data_dict["title"] = title.get_text().strip()
+            if owner not in [-1, None]:
+                db_data_dict["owner"] = owner.get_text().strip()
+            if li_tags not in [-1, None]:
+                db_data_dict["tags"] = ", ".join([li.get_text().strip() for li in li_tags])
+            # check if all keys are present
+            if all(value != "" for value in db_data_dict.values()):
+                # Save the data to the database
+                save_to_db(db_data_dict)
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def create_new_database(DB_NAME, TABLE_NAME):
@@ -121,17 +127,7 @@ def scrape_website(base_url, PAGE_NUM):
         print("done")
         page += 1
 
-def read_records():
-    db = connect_db()
-    cursor = db.cursor()
-    cursor.execute(f"SELECT * FROM {TABLE_NAME}")
-    records = cursor.fetchall()
-    print("Questions in the database:")
-    for record in records:
-        print(record)
-    db.close()
 
 if __name__ == "__main__":
     base_url = "https://stackoverflow.com/questions?tab=newest"
     scrape_website(base_url, PAGE_NUM)
-    read_records()
