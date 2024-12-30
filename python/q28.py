@@ -44,8 +44,10 @@ def scrape_page(url):
     """Scrape data from a single page."""
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
+    # fetching the html container containing all the questions
     question_section = soup.find("div", class_="flush-left", id="questions")
     for data in question_section.find_all("div"):
+        # fetch description, title, owner, tags using tag and class name
         description = data.find("div", class_="s-post-summary--content-excerpt")
         title = data.find("h3", class_="s-post-summary--content-title")
         owner = data.find("div", class_="s-user-card--link")
@@ -59,8 +61,9 @@ def scrape_page(url):
             db_data_dict["owner"] = owner.get_text().strip()
         if li_tags not in [-1, None]:
             db_data_dict["tags"] = ", ".join([li.get_text().strip() for li in li_tags])
-        # Save the data to the database
+        # check if all keys are present
         if all(value != "" for value in db_data_dict.values()):
+            # Save the data to the database
             save_to_db(db_data_dict)
 
 
