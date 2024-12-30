@@ -14,6 +14,6 @@ def run_length_encode(s):
     return ''.join(compressed)
 
 if __name__=="__main__":
-    input_string = "aaabbc"
+    input_string = "babababa"
     encoded_string = run_length_encode(input_string)
     print(f"Compressed: {encoded_string}")

@@ -1,8 +1,10 @@
 '''18. Write a program to create a simple text-based database system with CRUD (Create, read, update and delete) operations.'''
 
 '''
-Database Setup:
-Before running the program, you need to create a MySQL database and a table for storing the user records. You can execute the following SQL commands in MySQL:
+DATABASE SETUP:
+
+Before running the program, you need to create a MySQL database and a table for storing the user records. 
+You can execute the following SQL commands in MySQL:
 
 CREATE DATABASE testdb;
 USE testdb;
