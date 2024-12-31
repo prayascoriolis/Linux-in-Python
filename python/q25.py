@@ -5,6 +5,7 @@ import json
 from jsonschema import validate, ValidationError, SchemaError
 
 def validate_xml(xml_file, schema_file):
+    # reference : https://www.w3.org/TR/xmlschema11-2
     try:
         xml_doc = etree.parse(xml_file) # XML file
         with open(schema_file, 'rb') as f:  # XSD schema in binary mode

@@ -1,5 +1,7 @@
 """28. Implement a web scraper that saves data into a database and handles pagination."""
 
+# reference doc : https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
 import os
 import requests
 from bs4 import BeautifulSoup
