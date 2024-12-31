@@ -28,5 +28,5 @@ def read_n_write_csv(file_path):
         print('ERROR: ',e)
 
 if __name__ == "__main__":
-    file_path = "./dir/black.csv"
+    file_path = "./dir/csv_file.csv"
     read_n_write_csv(file_path)

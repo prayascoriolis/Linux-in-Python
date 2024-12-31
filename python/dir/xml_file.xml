@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <image id="26000" name="frame_026000" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="581.17,624.15" z_order="0">
+      <attribute name="Trajectory">flight</attribute>
+      <attribute name="Visibility">1</attribute>
+    </points>
+  </image>
+  <image id="26001" name="frame_026001" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="581.23,624.51" z_order="0">
+      <attribute name="Visibility">1</attribute>
+      <attribute name="Trajectory">flight</attribute>
+    </points>
+  </image>
+  <image id="26002" name="frame_026002" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="580.33,623.61" z_order="0">
+      <attribute name="Visibility">1</attribute>
+      <attribute name="Trajectory">flight</attribute>
+    </points>
+  </image>
+  <image id="26003" name="frame_026003" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="580.33,623.61" z_order="0">
+      <attribute name="Visibility">1</attribute>
+      <attribute name="Trajectory">flight</attribute>
+    </points>
+  </image>
+  <image id="26004" name="frame_026004" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="579.43,623.61" z_order="0">
+      <attribute name="Visibility">1</attribute>
+      <attribute name="Trajectory">flight</attribute>
+    </points>
+  </image>
+  <image id="26005" name="frame_026005" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="579.43,623.61" z_order="0">
+      <attribute name="Visibility">1</attribute>
+      <attribute name="Trajectory">flight</attribute>
+    </points>
+  </image>
+  <image id="26006" name="frame_026006" width="1920" height="1080">
+    <points label="Ball" source="manual" occluded="0" points="578.98,627.21" z_order="0">
+      <attribute name="Trajectory">flight</attribute>
+      <attribute name="Visibility">1</attribute>
+    </points>
+  </image>
+</annotations>

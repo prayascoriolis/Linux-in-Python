@@ -1,0 +1,48 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+      "repository": { "type": "string", "format": "uri" },
+      "homepage": { "type": "string", "format": "uri" },
+      "main": { "type": "string" },
+      "types": { "type": "string" },
+      "keywords": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "scripts": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      },
+      "author": { "type": "string" },
+      "license": { "type": "string" },
+      "devDependencies": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      },
+      "dependencies": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      },
+      "files": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": [
+      "name",
+      "description",
+      "version",
+      "repository",
+      "main",
+      "keywords",
+      "scripts",
+      "author",
+      "license",
+      "dependencies"
+    ]
+  }
+  

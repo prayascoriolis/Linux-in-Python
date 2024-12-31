@@ -1,0 +1,56 @@
+{
+    "name": "node-js-securify",
+    "description": "Node-Js-Securify is an advanced npm package designed to enhance the security of Node.js applications. It provides a comprehensive set of security features and analysis capabilities to identify potential vulnerabilities and enforce best practices in accordance with OWASP guidelines.",
+    "version": "2.2.6",
+    "repository": "https://github.com/prayas7102/NodejsSecurify",
+    "homepage": "https://pure-javascript-blogs.hashnode.dev/nodejssecurify-level-up-your-nodejs-app-security-with-this-npm-based-automation-package",
+    "main": "./dist/NodeJsSecurify.js",
+    "types": "./dist/NodeJsSecurify.d.ts",
+    "keywords": [
+      "NodeJs",
+      "TypeScript",
+      "Input Validation",
+      "Dangerous Functions",
+      "DOS Attack",
+      "ReGex DOS Attack",
+      "Brute Force Attack",
+      "OWASP",
+      "CallBack Hell",
+      "XSS Attack",
+      "Insecure Security Headers",
+      "Unsafe npm packages",
+      "Insecure Authentication",
+      "Code Injection",
+      "Naive Bayes classifier"
+    ],
+    "scripts": {
+      "build": "tsc",
+      "prepare": "npm run build",
+      "start": "concurrently \"npx tsc -w\" \"node ./dist/NodeJsSecurify.js\"",
+      "test": "vitest"
+    },
+    "author": "Prayas Kumar",
+    "license": "ISC",
+    "devDependencies": {
+      "@types/esprima": "^4.0.3",
+      "@types/esquery": "^1.5.0",
+      "@types/node": "^20.3.3",
+      "@types/pdfkit": "^0.13.5",
+      "typescript": "^5.1.6",
+      "vitest": "^2.1.3"
+    },
+    "dependencies": {
+      "colors": "^1.4.0",
+      "concurrently": "^8.2.0",
+      "esprima": "^4.0.1",
+      "esquery": "^1.5.0",
+      "natural": "^6.5.0",
+      "path": "^0.12.7",
+      "pdfkit": "^0.15.0",
+      "randexp": "^0.5.3"
+    },
+    "files": [
+      "dist/**/*"
+    ]
+  }
+  
