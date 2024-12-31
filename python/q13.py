@@ -54,8 +54,22 @@ def evaluate_expression(expr):
 
     return values[0]
 
+def validate_brackets(text):
+    stack = []
+    for word in text:
+        if word == '(':
+            stack.append(word)
+        elif word ==')':
+            if len(stack)>0 and stack[-1] == '(':
+                stack = stack[:len(stack)-1]
+            else:
+                return False
+    return len(stack)==0
+
+
 if __name__=="__main__":
     expression = "2 * 3 + 5"
     print(f"Result: {evaluate_expression(expression)}")
-    # expression = "22 / 7"
-    # print(f"Result: {evaluate_expression(expression)}")
+    expression = "22 / 7"
+    print(f"Result: {evaluate_expression(expression)}")
+    print(validate_brackets('(2 * 3 + 5)()'))

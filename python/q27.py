@@ -10,9 +10,9 @@ def match_pattern(text, category):
         'hyperlink': r"https://www\.[a-zA-Z0-9]+\.[a-zA-Z]+/[a-zA-Z0-9]+",
         'capital': r"[A-Z]+[a-z]+",
     }
-    match = re.search(pattern_dict[category], text)
+    match = re.findall(pattern_dict[category], text)
     if match:
-        return match.group()
+        return match
     else:
         return "No match found."
 
