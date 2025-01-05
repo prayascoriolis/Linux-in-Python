@@ -2,7 +2,6 @@
 
 memo = {}
 def subset_sum(arr, index, current_sum, target):
-
     # if sum is equal to target
     if target == current_sum:
         return True
