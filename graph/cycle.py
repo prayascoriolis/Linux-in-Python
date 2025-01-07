@@ -5,12 +5,29 @@ def detect_cycle_in_disconnected_graph(graph):
     visited = set()  # Keep track of all visited nodes globally
     for node in graph:  # Iterate over all nodes to cover disconnected components
         if node not in visited:
-            if detect_cycle(graph, node, visited):
+            # print(detect_cycle_dfs(graph, node, visited, -1))
+            if detect_cycle_bfs(graph, node, visited):
                 return True
     return False
 
+def detect_cycle_dfs(adj, current, visited, parent):
+    # Mark the current node as visited
+    visited.add(current)
+    # Recur for all the vertices adjacent to this vertex
+    for neighbor in adj[current]:
+        # If an adjacent vertex is not visited,
+        # then recur for that adjacent
+        if neighbor[0] not in visited:
+            if detect_cycle_dfs(adj, neighbor[0], visited, current):
+                return True
+        # If an adjacent vertex is visited and
+        # is not the parent of the current vertex,
+        # then there exists a cycle in the graph.
+        elif neighbor[0] != parent:
+            return True
+    return False
 
-def detect_cycle(graph, start, visited):
+def detect_cycle_bfs(graph, start, visited):
     # Create a queue for BFS
     queue = deque([start])
     visited.add(start)  # Mark the starting node as visited
